@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Video</title>
+</head>
+<body>
+  <p>Opening a random video...</p>
+
+  <script>
+    const links = [
+      "https://www.youtube.com/watch?v=bmldM5GT4lU",
+      "https://www.youtube.com/watch?v=acGDDuOKEYY",
+      "https://www.youtube.com/watch?v=pNP-OqMQHcA",
+      "https://www.youtube.com/watch?v=Reao_AA3Bb0"
+    ];
+
+    const randomIndex = Math.floor(Math.random() * links.length);
+    const chosenLink = links[randomIndex];
+
+    window.location.href = chosenLink;
+  </script>
+</body>
+</html>
