@@ -4,9 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Random Video</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    a {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 18px;
+      background: #0a66c2;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+    }
+  </style>
 </head>
 <body>
-  <p>Opening a random video...</p>
+  <h1>Opening a random video...</h1>
+  <p>If nothing happens, tap the button below.</p>
+  <a id="fallbackLink" href="#">Open video</a>
 
   <script>
     const links = [
@@ -24,7 +42,11 @@
     const randomIndex = Math.floor(Math.random() * links.length);
     const chosenLink = links[randomIndex];
 
-    window.location.href = chosenLink;
+    document.getElementById("fallbackLink").href = chosenLink;
+
+    setTimeout(() => {
+      window.location.href = chosenLink;
+    }, 500);
   </script>
 </body>
 </html>
