@@ -1,52 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Random Video</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opening Instagram Reel...</title>
   <style>
     body {
+      margin: 0;
+      padding: 32px 20px;
       font-family: Arial, sans-serif;
+      background: #fafafa;
+      color: #111;
       text-align: center;
-      padding: 40px;
     }
-    a {
+
+    .box {
+      max-width: 520px;
+      margin: 0 auto;
+      background: white;
+      border: 1px solid #e6e6e6;
+      border-radius: 14px;
+      padding: 28px 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      line-height: 1.5;
+      margin: 10px 0;
+    }
+
+    a.button {
       display: inline-block;
-      margin-top: 20px;
-      padding: 12px 18px;
-      background: #0a66c2;
+      margin-top: 18px;
+      padding: 14px 20px;
+      background: #e1306c;
       color: white;
       text-decoration: none;
-      border-radius: 8px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .small {
+      margin-top: 18px;
+      font-size: 14px;
+      color: #666;
+      word-break: break-word;
     }
   </style>
 </head>
 <body>
-  <h1>Opening a random video...</h1>
-  <p>If nothing happens, tap the button below.</p>
-  <a id="fallbackLink" href="#">Open video</a>
+  <div class="box">
+    <h1>Opening Instagram Reel...</h1>
+    <p>We are trying to open a random reel in Instagram.</p>
+    <p>If nothing happens, tap the button below.</p>
+
+    <a id="openButton" class="button" href="#" rel="noopener noreferrer">Open in Instagram</a>
+
+    <p class="small" id="chosenText"></p>
+  </div>
 
   <script>
     const links = [
-      "https://www.instagram.com/reel/DYcp6UxNMeq/?igsh=d21pY3FjbGJ4djNh",
-      "https://www.instagram.com/reel/DVwk9ndgd1a/?igsh=MTNuYXJsanF2OXRscA==",
-      "https://www.instagram.com/reel/DX_JpiVICw5/?igsh=b3ZsNDVxcmptcjN0",
-      "https://www.instagram.com/reel/DXY2608kTpO/?igsh=MXBvdTB0OGRrNnRhcA==",
-      "https://www.instagram.com/reel/DWyrWv-DSM0/?igsh=MWdwMDFzYXNhcXJjNQ==",
-      "https://www.instagram.com/reel/DYhSqC3o0tS/?igsh=M2Iwb2ptZTFnZDJz",
-      "https://www.instagram.com/reel/DXD20qcIF3K/?igsh=MWRzMXhpcHRwN3A1eg==",
-      "https://www.instagram.com/reel/DUBqWykCvgz/?igsh=aHY3N2R4aW0wbmVx",
-      "https://www.instagram.com/reel/DY2e-pGzOIC/?igsh=MWtubTM3aWh0a3l0bA=="
+      "https://www.instagram.com/reel/DYcp6UxNMeq/",
+      "https://www.instagram.com/reel/DVwk9ndgd1a/",
+      "https://www.instagram.com/reel/DX_JpiVICw5/",
+      "https://www.instagram.com/reel/DXY2608kTpO/",
+      "https://www.instagram.com/reel/DWyrWv-DSM0/",
+      "https://www.instagram.com/reel/DYhSqC3o0tS/",
+      "https://www.instagram.com/reel/DXD20qcIF3K/",
+      "https://www.instagram.com/reel/DUBqWykCvgz/",
+      "https://www.instagram.com/reel/DY2e-pGzOIC/"
     ];
 
     const randomIndex = Math.floor(Math.random() * links.length);
     const chosenLink = links[randomIndex];
 
-    document.getElementById("fallbackLink").href = chosenLink;
+    const openButton = document.getElementById("openButton");
+    const chosenText = document.getElementById("chosenText");
 
-    setTimeout(() => {
-      window.location.href = chosenLink;
-    }, 500);
+    openButton.href = chosenLink;
+    chosenText.textContent = "Selected reel: " + chosenLink;
+
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isAndroid = /android/i.test(ua);
+    const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+
+    function toAndroidIntent(url) {
+      const cleanUrl = url.replace(/^https?:\/\//, "");
+      return "intent://" + cleanUrl + "#Intent;scheme=https;package=com.instagram.android;S.browser_fallback_url=" + encodeURIComponent(url) + ";end";
+    }
+
+    function tryOpen() {
+      if (isAndroid) {
+        window.location.href = toAndroidIntent(chosenLink);
+        setTimeout(() => {
+          window.location.href = chosenLink;
+        }, 1200);
+      } else if (isIOS) {
+        window.location.href = chosenLink;
+      } else {
+        window.location.href = chosenLink;
+      }
+    }
+
+    setTimeout(tryOpen, 500);
   </script>
 </body>
 </html>
