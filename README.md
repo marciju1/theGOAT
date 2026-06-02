@@ -1,4 +1,4 @@
-# marciju1.github.io
+# marciju1.github.io/theGOAT
 
 A small website, that is designed to select one video-link from a list of links
 
