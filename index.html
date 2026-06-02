@@ -64,50 +64,68 @@
     <p class="small" id="chosenText"></p>
   </div>
 
-  <script>
-    const links = [
-      "https://www.instagram.com/reel/DYcp6UxNMeq/",
-      "https://www.instagram.com/reel/DVwk9ndgd1a/",
-      "https://www.instagram.com/reel/DX_JpiVICw5/",
-      "https://www.instagram.com/reel/DWyrWv-DSM0/",
-      "https://www.instagram.com/reel/DYhSqC3o0tS/",
-      "https://www.instagram.com/reel/DXD20qcIF3K/",
-      "https://www.instagram.com/reel/DUBqWykCvgz/",
-      "https://www.instagram.com/reel/DY2e-pGzOIC/"
-    ];
+<script>
+  const links = [
+    "https://www.instagram.com/reel/DYcp6UxNMeq/",
+    "https://www.instagram.com/reel/DVwk9ndgd1a/",
+    "https://www.instagram.com/reel/DX_JpiVICw5/",
+    "https://www.instagram.com/reel/DXY2608kTpO/",
+    "https://www.instagram.com/reel/DWyrWv-DSM0/",
+    "https://www.instagram.com/reel/DYhSqC3o0tS/",
+    "https://www.instagram.com/reel/DXD20qcIF3K/",
+    "https://www.instagram.com/reel/DUBqWykCvgz/",
+    "https://www.instagram.com/reel/DY2e-pGzOIC/"
+  ];
 
-    const randomIndex = Math.floor(Math.random() * links.length);
-    const chosenLink = links[randomIndex];
+  let lastLink = null;
+  try {
+    lastLink = localStorage.getItem("lastInstagramReel");
+  } catch (e) {
+    lastLink = null;
+  }
 
-    const openButton = document.getElementById("openButton");
-    const chosenText = document.getElementById("chosenText");
+  let chosenLink;
 
-    openButton.href = chosenLink;
-    chosenText.textContent = "Selected reel: " + chosenLink;
+  if (links.length === 1) {
+    chosenLink = links[0];
+  } else {
+    do {
+      const randomIndex = Math.floor(Math.random() * links.length);
+      chosenLink = links[randomIndex];
+    } while (chosenLink === lastLink);
+  }
 
-    const ua = navigator.userAgent || navigator.vendor || window.opera;
-    const isAndroid = /android/i.test(ua);
-    const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  try {
+    localStorage.setItem("lastInstagramReel", chosenLink);
+  } catch (e) {}
 
-    function toAndroidIntent(url) {
-      const cleanUrl = url.replace(/^https?:\/\//, "");
-      return "intent://" + cleanUrl + "#Intent;scheme=https;package=com.instagram.android;S.browser_fallback_url=" + encodeURIComponent(url) + ";end";
-    }
+  const openButton = document.getElementById("openButton");
+  const chosenText = document.getElementById("chosenText");
 
-    function tryOpen() {
-      if (isAndroid) {
-        window.location.href = toAndroidIntent(chosenLink);
-        setTimeout(() => {
-          window.location.href = chosenLink;
-        }, 1200);
-      } else if (isIOS) {
+  openButton.href = chosenLink;
+  chosenText.textContent = "Selected reel: " + chosenLink;
+
+  const ua = navigator.userAgent || navigator.vendor || window.opera;
+  const isAndroid = /android/i.test(ua);
+  const isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+
+  function toAndroidIntent(url) {
+    const cleanUrl = url.replace(/^https?:\/\//, "");
+    return "intent://" + cleanUrl + "#Intent;scheme=https;package=com.instagram.android;S.browser_fallback_url=" + encodeURIComponent(url) + ";end";
+  }
+
+  function tryOpen() {
+    if (isAndroid) {
+      window.location.href = toAndroidIntent(chosenLink);
+      setTimeout(() => {
         window.location.href = chosenLink;
-      } else {
-        window.location.href = chosenLink;
-      }
+      }, 1200);
+    } else {
+      window.location.href = chosenLink;
     }
+  }
 
-    setTimeout(tryOpen, 500);
-  </script>
+  setTimeout(tryOpen, 500);
+</script>
 </body>
 </html>
